@@ -31,7 +31,7 @@ function authenticate (idToken) {
     // getDownloadUrl ("gcloud", "/videos/new/intro.mp4")
 
     const operation = process.argv [4];
-    run (storageBackend, operation)
+    run (operation)
 
   })
   .catch((error) => {
@@ -64,7 +64,7 @@ function download (url) {
     
 }
 
-function run (storage, operation) {
+function run (operation) {
     switch (operation) {
         default:
             console.warn (`Unsupported operation ${operation}`)
@@ -75,13 +75,16 @@ function run (storage, operation) {
                 break ;
             }
 
-            storagePlatform.upload (storage, process.argv [4], process.argv [5]) ;
+            storagePlatform.upload (uid, process.argv [5], process.argv [6]) ;
             break ;
         case "list":
-            storagePlatform.list (storage, process.argv [4]) ;
+            folder = null ;
+            if (process.argv.length == 7)
+                folder = process.argv [6]
+            storagePlatform.list (uid, process.argv [5], process.argv[6]) ;
             break ;
         case "download":
-            storagePlatform.getDownloadUrl (storage, process.argv [4]) ;
+            storagePlatform.getDownloadUrl (uid, process.argv [5]) ;
             break ;
 
     }
