@@ -39,7 +39,7 @@ async function list (uid, folder) {
         // console.log (n + ": " + url)
     }
 
-    console.log (json)
+    console.log (JSON.stringify(json))
 }
 
 async function getDownloadUrl (uid, filename) {
