@@ -42,10 +42,12 @@ function authenticate (idToken) {
 
 authenticate (process.argv [2])
 
-function download (url) {
-    uri = "~/clover/" + uid + "/cache/" + url.replaceAll ("/", ".")
-    fs.mkdirSync ("~/clover/" + uid + "/cache", {recursive : true});
-    cmd = spawn ("axel", [url, "-n", "4", "-o", uri])
+async function download (url) {
+    // console.debug (`download ${url}`)
+    const homedir = require('os').homedir() + "/clover/" + uid + "/cache/" 
+    uri = homedir + url.replaceAll ("/", ".")
+    fs.mkdirSync (homedir, {recursive : true});
+    cmd = await spawn ("axel", [url, "-n", "4", "-o", uri])
     cmd.stdout.on("data", data => {
         console.log(`stdout: ${data}`);
     });
@@ -60,11 +62,12 @@ function download (url) {
     
     cmd.on("close", code => {
         console.log(`child process exited with code ${code}`);
+        storagePlatform.upload (uid, uri, process.argv [6]) ;
     });
     
 }
 
-function run (operation) {
+async function run (operation) {
     switch (operation) {
         default:
             console.warn (`Unsupported operation ${operation}`)
@@ -75,7 +78,7 @@ function run (operation) {
                 break ;
             }
 
-            storagePlatform.upload (uid, process.argv [5], process.argv [6]) ;
+            await download (process.argv [5])
             break ;
         case "list":
             folder = null ;
