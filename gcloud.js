@@ -43,6 +43,7 @@ async function list (uid, folder) {
 }
 
 async function getDownloadUrl (uid, filename) {
+    // console.log (filename)
     const options = {
         version: 'v2', // defaults to 'v2' if missing.
         action: 'read',
@@ -50,7 +51,7 @@ async function getDownloadUrl (uid, filename) {
       };
   
   
-    const [fname] = await bucket.file (uid + filename).getSignedUrl (options) ;
+    const [fname] = await bucket.file (filename).getSignedUrl (options) ;
     // console.log (fname)
     return fname ;
 }
