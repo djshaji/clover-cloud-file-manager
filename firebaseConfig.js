@@ -1,17 +1,26 @@
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig_GCP = {
+  apiKey: "AIzaSyAXkfNJthVFmc8rw4jKKb6RBQXbJPJmUks",
+  authDomain: "clover-356904.firebaseapp.com",
+  projectId: "clover-356904"
+};
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDuykKJ4hsZLhlp-hHTZki1diE0lyTzTlM",
-  authDomain: "clover-cloud-file-manager.firebaseapp.com",
-  projectId: "clover-cloud-file-manager",
-  storageBucket: "clover-cloud-file-manager.appspot.com",
-  messagingSenderId: "427682005772",
-  appId: "1:427682005772:web:22473045bd202c5b74ff29",
-  measurementId: "G-WPJNYEZMJ2"
+  apiKey: "AIzaSyCn8A_j9ZqwAIsMev2t7ildmhEVJXlhC1c",
+  authDomain: "clover-356904.firebaseapp.com",
+  projectId: "clover-356904",
+  storageBucket: "clover-356904.appspot.com",
+  messagingSenderId: "384276389297",
+  appId: "1:384276389297:web:d17eaf64688e97f49fb190"
 };
 
 // Initialize Firebase
 firebaseApp = firebase.initializeApp(firebaseConfig);
-const analytics = firebase.analytics();
+analytics = null ;
+
+if (analyticsEnabled)
+  analytics = firebase.analytics();
 // const messaging = firebase.messaging ();
 
 var uiConfigRedirect = {

@@ -1,8 +1,8 @@
 <?php
 $config = array (
-    "dir"=> "/mnt/data/djshaji/Projects/clover-cloud-file-manager",
+    "dir"=> "/var/www/clover",
     "filesdir"=> "/mnt/data/djshaji/Projects/clover-files",
-    "serviceAccount"=> "../clover-admin/clover-cloud-file-manager-firebase-adminsdk-kyyev-306eff38f6.json",
+    "serviceAccount"=> "/var/www/clover-keys/clover-356904-firebase-adminsdk-72w43-c9231f90ae.json",
     "database" => "mysql:host=localhost;dbname=letsgodil;charset=utf8mb4",
     "database_user" => "clover",
     "database_pass" => "iloveshajikhan",
@@ -23,7 +23,8 @@ $config = array (
     ),
     "messages" => array (
       "new"=> true
-    )
+    ),
+    "analytics" => false
   );
   
   

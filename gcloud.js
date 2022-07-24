@@ -1,13 +1,39 @@
 const { getStorage } = require('firebase-admin/storage');
+const { spawn } = require("child_process");
 const bucket = getStorage().bucket();
 
 async function upload(uid, filePath, destFileName) {
+    dest = ""
+    if (destFileName [0] == "/")
+        dest = uid + destFileName
+    else
+        dest = uid + "/" + destFileName
+    
     await bucket.upload(filePath, {
-      destination: uid + "/" + destFileName,
+      destination: dest
     });
   
-    console.log(`${filePath} uploaded to ${bucket}`);
+    console.log(`${filePath} uploaded to ${destFileName}`);
 }  
+
+async function upload1 (uid, filePath, destFileName) {
+    cmd = await spawn ("gsutil", ["cp", filePath, "gs://clover-cloud-file-manager.appspot.com/" + uid + destFileName])
+    cmd.stdout.on("data", data => {
+        console.log(`${data}`);
+    });
+    
+    cmd.stderr.on("data", data => {
+        console.log(`${data}`);
+    });
+    
+    cmd.on('error', (error) => {
+        console.log(`error: ${error.message}`);
+    });
+    
+    cmd.on("close", code => {
+        // console.log(`child process exited with code ${code}`);
+    });
+}
 
 async function list (uid, folder) {
     // console.debug (`getting file names for ${folder}...`)

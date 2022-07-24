@@ -1,3 +1,5 @@
+#!/usr/bin/node
+
 const { initializeApp, cert } = require('firebase-admin/app');
 const { getAuth } = require('firebase-admin/auth');
 const { spawn } = require("child_process");
@@ -44,16 +46,18 @@ authenticate (process.argv [2])
 
 async function download (url) {
     // console.debug (`download ${url}`)
-    const homedir = require('os').homedir() + "/clover/" + uid + "/cache/" 
+    // const homedir = require('os').homedir() + "/clover/" + uid + "/cache/" 
+    const homedir =  "/tmp/clover/" + uid + "/cache/" 
     uri = homedir + url.replaceAll ("/", ".")
     fs.mkdirSync (homedir, {recursive : true});
+    console.log ("saving file to " + uri)
     cmd = await spawn ("axel", [url, "-n", "4", "-o", uri])
     cmd.stdout.on("data", data => {
-        console.log(`stdout: ${data}`);
+        console.log(`${data}`);
     });
     
     cmd.stderr.on("data", data => {
-        console.log(`stderr: ${data}`);
+        console.log(`${data}`);
     });
     
     cmd.on('error', (error) => {
@@ -61,7 +65,7 @@ async function download (url) {
     });
     
     cmd.on("close", code => {
-        console.log(`child process exited with code ${code}`);
+        // console.log(`child process exited with code ${code}`);
         storagePlatform.upload (uid, uri, process.argv [6]) ;
     });
     
