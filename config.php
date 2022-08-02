@@ -19,12 +19,24 @@ $config = array (
     "logo" => "/logo.png",
 
     "drawer" => array (
+      "List files"=> '?list=1',
+      "Thumbnails"=> '?icons=1',
       "About"=> "/anneli/about"
     ),
     "messages" => array (
       "new"=> true
     ),
-    "analytics" => false
+    "analytics" => false,
+    "footer-floating" => '<!-- Expandable Textfield -->
+          <div class="mdl-textfield pt-3 mdl-js-textfield mdl-textfield--expandable">
+            <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
+              <i class="material-icons">search</i>
+            </label>
+            <div class="mdl-textfield__expandable-holder">
+              <input onchange="searchFiles();" class="mdl-textfield__input" type="text" id="search">
+              <label class="mdl-textfield__label" for="sample-expandable">Search</label>
+            </div>
+          </div>'
   );
   
   

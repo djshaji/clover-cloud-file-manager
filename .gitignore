@@ -124,3 +124,5 @@ yallist
 yargs
 yargs-parser
 yocto-queue
+vendor/
+node_modules/

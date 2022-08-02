@@ -139,17 +139,33 @@ function add_file (name, url, isDir = false) {
     console.log (`${name} -> ${url}`)
     div = uic ("div")
     for (cl of [
-        'col-md-1', 'justify-content-center', 'text-center', 'text-wrap'
+        'col-md-6', 'row','justify-content-center', 'text-center', 'text-wrap'
     ]) 
         div.classList.add (cl)
 
     icon = uic ("img")
     if (isDir)
-        icon.src = "folder.png"
-    else
-        icon.src = "video.png"
+        icon.src = findIcon ("folder", "places")
+    else {
+        ext = url.split (".")
+        if (ext.length == 1)
+          ext = "mp4"
+        else
+          ext = ext [ext.length - 1]
+        
+        thumb = url.replace (name, "." + name) + ".jpg"
+        console.log (url, name, thumb)
+        if (files.indexOf (thumb) != -1)
+          icon.src = "https://storage.cloud.google.com/qsx/" + thumb
+        else {
+          console.log ("no thumbnail for ",thumb)
+          icon.src = findIcon (mimes [ext], "mimetypes")
+        }
+    }
     
     icon.width = iconSize
+    icon.classList.add ("mdl-shadow--4dp")
+    icon.classList.add ('col-12')
     link = uic ("a")
     if (isDir)
         link.href = `javascript: load_folder ("${url}");`
@@ -158,11 +174,16 @@ function add_file (name, url, isDir = false) {
 
     label = uic ("label")
     label.classList.add ("h6")
+    label.classList.add ("btn")
+    label.classList.add ("mdl-shadow--4dp")
     label.classList.add ("text-break")
     label.innerText = name
 
+    box = uic ("div")
     link.appendChild (icon)
-    link.appendChild (label)
+    download = uic ("a")
+    download.innerHTML = '<span class="h2 p-2 align-bottom material-symbols-outlined">download</span>'
+    download.href = `https://storage.cloud.google.com/qsx/${url}`
 
     id = name.replaceAll (" ", "_")
     link.id = id
@@ -172,6 +193,9 @@ function add_file (name, url, isDir = false) {
     tooltip.setAttribute ("for", id)
     div.appendChild (tooltip)
     div.appendChild (link)
+    div.appendChild (box)
+    box.appendChild (download)
+    box.appendChild (label)
 
     if (! (currentFiles.includes (name))) {
         currentFiles.push (name)
@@ -195,6 +219,8 @@ function load_folder (folder) {
                 vector = file.split (folder)
                 v2 = vector [1].split ("/")
                 if (v2.length == 2) {
+                    if (v2[1][0] == "." || v2[1] == '')
+                      continue
                     add_file (v2 [1], file)
                 } else {
                     add_file (v2 [1], folder + "/" + v2 [1], true )
@@ -232,5 +258,42 @@ function populate_breadcrumbs (folder) {
     for (path of folder.split ("/")) {
         add_breadcrumb (path, 'javascript: load_folder ("' + root + path + '")', true)
         root = root + path + "/"
+    }
+}
+
+function findIcon (icon, category) {
+    return "/anneli/assets/css/icons/" + icon_theme + "/" + iconSize + "x" + iconSize + "/" + category + "/" + icon + ".png"
+}
+
+function searchFiles () {
+    filename = ui ("search").value
+    if (filename == "")
+        return ;
+    
+    if (filename.startsWith ("#")) {
+        cmd = filename.split ("#")[1]
+        console.log ("running command", cmd)
+        window [cmd] ()
+        return
+    }
+
+    console.log ("searching for "+ filename)
+    ui ("files").innerHTML = ""
+    for (file of files) {
+        if (file.toLowerCase (). search (filename)== -1) {
+            // console.log (`No ${filename} in ${file.toLowerCase ()}`)
+            continue
+        }
+        
+        v = file.split ("/")
+        add_file (v [v.length - 1], file)        
+    }
+}
+
+function sl () {
+    ui ("files").innerHTML = ""
+    for (file of files) {
+        v = file.split ("/")
+        add_file (v [v.length - 1], file)        
     }
 }

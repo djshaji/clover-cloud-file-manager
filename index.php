@@ -15,6 +15,19 @@ if ($uid == null) {
   require_login ();
 }
 
+if ($uid != "3a6Og0ypRza5zEDd3vkApd7fo7l1") {
+  ?>
+  <div class="alert bg-danger text-white h4">
+    <span class="material-symbols-outlined">
+      error
+    </span>
+    Account not authorized
+  </div>
+  <?php 
+  include "anneli/footer.php";
+  die () ;
+}
+
 $storage = new StorageClient(
   [    'keyFilePath' => '/var/www/clover-keys/clover-356904-106c0cd7c587.json',
   ]
@@ -32,7 +45,30 @@ echo "</script>";
   <div class="alert alert-secondary p-2" id="breadcrumbs">
   </div>
   <div class="row p-3" id="files">
+    <?php if ($_GET ["icons"]) {
+      foreach ($bucket->objects() as $f) {
+        $name = $f -> name () ;
+        if (strpos($name, "/.") !== false)
+          continue;
+        echo '<div class="col-md-6 row justify-content-center text-center text-wrap">';
+        $b = basename ($name);
+        $d = dirname ($name);
+        $thumb = "https://storage.cloud.google.com/qsx/$d/.$b.jpg";
+        echo "<a class='col-12 row' href='javascript: window.open (\"https://storage.cloud.google.com/qsx/$name\", \"_blank\");'> <img class='col-12 mdl-shadow--4dp' src='$thumb'><label class='btn mdl-shadow--4dp'>$b</label></a>";
+        echo "</div>";
+      }
+    } ?>
   </div>
+  <?php if ($_GET ["list"]) {
+      echo '<div class="list-group">';
+      foreach ($bucket->objects() as $f) {
+        $name = $f -> name () ;
+        if (strpos($name, "/.") === false)
+          echo "<a href='javascript: window.open (\"https://storage.cloud.google.com/qsx/$name\", \"_blank\");' class=\"list-group-item list-group-item-action\">$name</a>";
+      }
+      echo "</div>";
+    }
+    ?>
 </div>
 
 <!-- Full screen modal -->
@@ -42,7 +78,7 @@ echo "</script>";
     <video autoplay=true controls=true width="500" height="300"></video>
   </div>
 </div>
-<script src="main.js">
+<script src="main.js?<?php time () ;?>">
 </script>
 
 <div class="alert m-0 text-center text-monospace bg-primary text-white"><?php passthru ("fortune -s");?></div>
@@ -51,7 +87,10 @@ include "anneli/footer.php";
 ?>
 
 <script>
-  iconSize = 64
+  iconSize = 256
   currentFiles = []
-  load_folder (null)
+  // load_folder (null)
 </script>
+<?php if ($_GET ["list"] != 1 && $_GET ["icons"] != 1) {
+  echo "<script>load_folder (null) ;</script>" ;
+}?>
