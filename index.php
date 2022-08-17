@@ -6,6 +6,7 @@
 require ("vendor/autoload.php");
 use Google\Cloud\Storage\StorageClient;
 // chdir ("/var/www/" . explode (".",$_SERVER ["HTTP_HOST"])[0]);
+
 chdir (__DIR__);
 include "config.php";
 include "anneli/header.php";
@@ -46,7 +47,15 @@ echo "</script>";
   </div>
   <div class="row p-3" id="files">
     <?php if ($_GET ["icons"]) {
-      foreach ($bucket->objects() as $f) {
+      $page = $_GET ["page"];
+      if ($page == null)
+        $page = "1";
+      $options = array (
+        "resultLimit"=> 100,
+        "nextPageToken"=> base64_encode ("Videos/Vixen/A Club VXN Vacation 2: VIXEN.mp4")
+      ); 
+      
+      foreach ($bucket->objects($options) as $f) {
         $name = $f -> name () ;
         if (strpos($name, "/.") !== false)
           continue;

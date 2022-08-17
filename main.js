@@ -1,4 +1,4 @@
-function play_video (url) {
+	function play_video (url) {
     if (url != "")
       $("#modal").modal ("show")
     console.log (`Playing video ${url}`);

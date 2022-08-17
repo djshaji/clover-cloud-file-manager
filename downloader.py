@@ -13,8 +13,8 @@ for line in s.split ("\n"):
 		print ("wget error code: %d" % exit_code)
 		exit ()
 
-	if (len (v) == 3):
-		cmd = "wget -c '%s' -O .'%s'.jpg" % (v [2], v [0])
+	if (len (v) == 3 and v [2].startswith ("https://")):
+		cmd = "wget -c '%s' -O .thumbs/.'%s'.jpg" % (v [2], v [0])
 		print (cmd)
 		exit_code = os.waitstatus_to_exitcode(os.system (cmd))
 		if (exit_code != 0):

@@ -126,3 +126,4 @@ yargs-parser
 yocto-queue
 vendor/
 node_modules/
+anneli/vendor
