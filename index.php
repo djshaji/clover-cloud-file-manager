@@ -31,7 +31,9 @@ if ($uid != "3a6Og0ypRza5zEDd3vkApd7fo7l1") {
   </div>
   <div class="row p-3" id="files">
     <?php 
-      $pattern = __DIR__ . "/files/" . $_GET ["q"] . "/*";
+      $pattern = __DIR__ . "/files/" . $_GET ["q"] . "/*.*";
+      print ($pattern);
+      var_dump(glob ($pattern));
       foreach (glob ($pattern) as $f) {
         ?>
         <div class="col-md-6 row justify-content-center text-center text-wrap">
@@ -45,7 +47,14 @@ if ($uid != "3a6Og0ypRza5zEDd3vkApd7fo7l1") {
             <i class="fas fa-folder" style="font-size:xx-large"></i>
             <label class='btn mdl-shadow--4dp'><?php echo $b ; ?></label>
           </a>
-          <?php } ?>
+          <?php } else { ?>
+            <a class='col-12 row'>
+              <i class="fas fa-folder" style="font-size:xx-large"></i>
+              <label class='btn mdl-shadow--4dp'><?php mime_content_type ($f) ; ?></label>
+            </a>
+            <?php
+          }
+          ?>
         </div>
         <?php
         // echo "<a class='col-12 row' href='javascript: window.open (\"https://storage.cloud.google.com/qsx/$name\", \"_blank\");'> <img class='col-12 mdl-shadow--4dp' src='$thumb'><label class='btn mdl-shadow--4dp'>$b</label></a>";
